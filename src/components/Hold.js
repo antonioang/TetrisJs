@@ -28,11 +28,11 @@ export function Hold() {
     }
 
     this.clean = () => {
-        ctx.clearRect(0, 0, ctx.canvas.width / 4, ctx.canvas.height / 4);
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height / 3);
     }
 
     function updateHold(value) {
-        ctx.clearRect(0, 0, ctx.canvas.width / 4, ctx.canvas.height / 4);
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height / 3);
         ctx.fillStyle = value.shape.color;
         value.shape.el.forEach((row, y) => {
             row.forEach((index, x) => {

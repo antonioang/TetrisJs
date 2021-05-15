@@ -10,7 +10,7 @@ import {POINTS} from "../utils/constants"
 
 export function Tetris() {
     const container = document.createElement("div");
-    let leftContainer, centerContainer, requestAnimateId, rightContainer, mainscreen, score, next,
+    let leftContainer, centerContainer, requestAnimateId, requestTimeoutId, rightContainer, mainscreen, score, next,
         level, lines, hold, start, btn, gameOver, btng;
     let time = {start: 0, elapsed: 0, level: 1000};
     let accountValues = {
@@ -47,18 +47,19 @@ export function Tetris() {
             time.start = now;
             if (!mainscreen.drop(p)) {
                 if (mainscreen.currentPiece.y === -1) {
-                    stopGame(requestAnimateId);
+                    stopGame(requestAnimateId, requestTimeoutId);
                     return
                 } else {
                     mainscreen.currentPiece = next.randomizeElement();
-                    animate();
                 }
             } else mainscreen.draw(p);
         }
+        requestTimeoutId = setTimeout(() => {
             requestAnimateId = requestAnimationFrame(animate)
+        }, 100);
     }
 
-    function stopGame(requestAnimateId) {
+    function stopGame(requestAnimateId, requestTimeoutId) {
         if (container.querySelector("#gameOver") == null) {
             container.appendChild(gameOver);
         } else {
@@ -67,6 +68,7 @@ export function Tetris() {
             });
         }
         cancelAnimationFrame(requestAnimateId);
+        cancelAnimationFrame(requestTimeoutId);
         hold.clean();
         account.score = 0;
         account.lines = 0;
@@ -95,7 +97,6 @@ export function Tetris() {
             mainscreen.currentPiece = hold.holded.hold;
             hold.holded.hold = clone;
         }
-
     }
 
     function attachListeners() {
